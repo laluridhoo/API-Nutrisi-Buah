@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+
+# Environment
+.env
+c242-ps287-e72004400fa9.json
+credentials/*.json
