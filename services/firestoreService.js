@@ -56,9 +56,53 @@ async function getAllPredictions(limit = 10) {
     }
 }
 
+// Fungsi untuk menyimpan konsumsi nutrisi
+async function storeNutritionIntake(userId, fruit, quantity, date) {
+    try {
+        const docRef = firestore.collection('nutritionIntake').doc();
+        const data = {
+            userId,
+            fruit,
+            quantity,
+            date: date || new Date()
+        };
+        await docRef.set(data);
+        return data;
+    } catch (error) {
+        console.error('Error storing nutrition intake:', error);
+        throw new Error('Gagal menyimpan data konsumsi nutrisi');
+    }
+}
+
+// Fungsi untuk mendapatkan konsumsi nutrisi berdasarkan rentang waktu
+async function getNutritionIntake(userId, startDate, endDate) {
+    try {
+        const intakeRef = firestore.collection('nutritionIntake');
+        const snapshot = await intakeRef
+            .where('userId', '==', userId)
+            .where('date', '>=', startDate)
+            .where('date', '<=', endDate)
+            .get();
+
+        if (snapshot.empty) {
+            return [];
+        }
+
+        return snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+    } catch (error) {
+        console.error('Error getting nutrition intake:', error);
+        throw new Error('Gagal mengambil data konsumsi nutrisi');
+    }
+}
+
 // Export semua fungsi
 module.exports = {
     storePrediction,
     getPredictionById,
-    getAllPredictions
+    getAllPredictions,
+    storeNutritionIntake,
+    getNutritionIntake
 };
