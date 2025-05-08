@@ -6,6 +6,9 @@ const inferenceService = require('../services/inferenceService');
 // Log informasi dari environment & Firebase Admin SDK
 console.log('Project ID:', process.env.GOOGLE_CLOUD_PROJECT || 'ID tidak ditemukan');
 console.log('Firebase initialized:', admin.apps.length > 0);
+console.log('Firebase initialized:', admin.apps.length);
+// Jangan akses serviceAccount.project_id lagi
+
 
 // 1. Mendapatkan informasi nutrisi buah berdasarkan label
 const getFruitByLabel = async (req, h) => {
@@ -267,6 +270,20 @@ const getMonthlyNutrition = async (req, h) => {
         kalori: consumption.kalori,
         timestamp: consumption.timestamp.toDate()
       });
+    });
+
+    // Membulatkan total bulanan ke 2 angka di belakang koma
+    totalKalori = parseFloat(totalKalori.toFixed(2));
+    totalProtein = parseFloat(totalProtein.toFixed(2));
+    totalKarbohidrat = parseFloat(totalKarbohidrat.toFixed(2));
+    totalLemak = parseFloat(totalLemak.toFixed(2));
+
+    // Membulatkan ringkasan harian ke 2 angka di belakang koma
+    Object.keys(dailySummaries).forEach(day => {
+      dailySummaries[day].totalKalori = parseFloat(dailySummaries[day].totalKalori.toFixed(2));
+      dailySummaries[day].totalProtein = parseFloat(dailySummaries[day].totalProtein.toFixed(2));
+      dailySummaries[day].totalKarbohidrat = parseFloat(dailySummaries[day].totalKarbohidrat.toFixed(2));
+      dailySummaries[day].totalLemak = parseFloat(dailySummaries[day].totalLemak.toFixed(2));
     });
 
     return h.response({
