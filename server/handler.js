@@ -1,12 +1,11 @@
 // Handler.js - API Smart Nutrition
-const { db, admin, serviceAccount } = require('../config/firestore');
+const { db, admin } = require('../config/firestore');
 const { v4: uuidv4 } = require('uuid');
 const inferenceService = require('../services/inferenceService');
 
-
-console.log('Project ID:', serviceAccount.project_id);
-console.log('Credential loaded:', !!serviceAccount);
-console.log('Firebase initialized:', admin.apps.length);
+// Log informasi dari environment & Firebase Admin SDK
+console.log('Project ID:', process.env.GOOGLE_CLOUD_PROJECT || 'ID tidak ditemukan');
+console.log('Firebase initialized:', admin.apps.length > 0);
 
 // 1. Mendapatkan informasi nutrisi buah berdasarkan label
 const getFruitByLabel = async (req, h) => {
