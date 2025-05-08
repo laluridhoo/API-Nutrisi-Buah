@@ -228,9 +228,9 @@ const nutritionDatabase = {
       "manganese": 0.14
     }
   },
-  "pear": {
-    "id": "pear-001",
-    "name": "Pear",
+  "pir": {
+    "id": "pir-001",
+    "name": "Pir",
     "kalori": 57,
     "protein": 0.4,
     "karbohidrat": 15.2,
@@ -253,8 +253,6 @@ const nutritionDatabase = {
       "manganese": 0.05
     }
   }
-
-
   
 };
 

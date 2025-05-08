@@ -168,14 +168,15 @@ const getDailyNutrition = async (req, h) => {
       });
     });
 
+    // Membulatkan hasil ke 2 angka di belakang koma
     return h.response({
       success: true,
       data: {
         date: queryDate,
-        totalKalori,
-        totalProtein,
-        totalKarbohidrat,
-        totalLemak,
+        totalKalori: parseFloat(totalKalori.toFixed(2)),
+        totalProtein: parseFloat(totalProtein.toFixed(2)),
+        totalKarbohidrat: parseFloat(totalKarbohidrat.toFixed(2)),
+        totalLemak: parseFloat(totalLemak.toFixed(2)),
         items
       }
     }).code(200);
@@ -290,9 +291,101 @@ const getMonthlyNutrition = async (req, h) => {
   }
 };
 
+// 5. Mendapatkan riwayat scan harian
+const getDailyHistoryConsumptions= async (req, h) => {
+  try {
+    const { userId } = req.params;
+    const { date } = req.query;
+
+    if (!userId || userId === 'null' || userId.trim() === '') {
+      return h.response({
+        success: false,
+        message: 'User ID wajib diisi'
+      }).code(400);
+    }
+
+    // Default ke hari ini jika tanggal tidak diberikan
+    const queryDate = date || new Date().toISOString().split('T')[0];
+
+    // Query scan untuk tanggal tertentu
+    const scansRef = db.collection('consumptions'); // Pastikan koleksi 'consumptions' ada di Firestore
+    const snapshot = await scansRef
+      .where('userId', '==', userId)
+      .where('date', '==', queryDate)
+      .get();
+
+    if (snapshot.empty) {
+      return h.response({
+        success: true,
+        message: 'Tidak ada data scan pada tanggal tersebut',
+        data: []
+      }).code(200);
+    }
+
+    // Deklarasikan scanHistory sebelum digunakan
+    const scanHistory = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      scanHistory.push({
+        fruitLabel: data.fruitLabel,
+        date: data.date
+      });
+    });
+
+    return h.response({
+      success: true,
+      data: scanHistory
+    }).code(200);
+  } catch (error) {
+    console.error('Kesalahan saat mengambil riwayat scan harian:', error);
+    return h.response({
+      success: false,
+      message: 'Terjadi kesalahan pada server saat mengambil riwayat scan harian'
+    }).code(500);
+  }
+};
+
+// 6. Mendapatkan detail nutrisi buah berdasarkan ID buah
+const getFruitDetailsById = async (req, h) => {
+  try {
+    const { fruitId } = req.params;
+
+    if (!fruitId || fruitId.trim() === '') {
+      return h.response({
+        success: false,
+        message: 'ID buah wajib diisi'
+      }).code(400);
+    }
+
+    // Query Firestore untuk mendapatkan detail buah berdasarkan ID
+    const fruitDoc = await db.collection('consumptions').doc(fruitId).get();
+
+    if (!fruitDoc.exists) {
+      return h.response({
+        success: false,
+        message: `Buah dengan ID '${fruitId}' tidak ditemukan`
+      }).code(404);
+    }
+
+    // Mengembalikan data buah
+    return h.response({
+      success: true,
+      data: fruitDoc.data()
+    }).code(200);
+  } catch (error) {
+    console.error('Kesalahan saat mengambil detail nutrisi buah:', error);
+    return h.response({
+      success: false,
+      message: 'Terjadi kesalahan pada server saat mengambil detail nutrisi buah'
+    }).code(500);
+  }
+};
+
 module.exports = {
   getFruitByLabel,
   addFruitConsumption,
   getDailyNutrition,
-  getMonthlyNutrition
+  getMonthlyNutrition,
+  getDailyHistoryConsumptions,
+  getFruitDetailsById 
 };

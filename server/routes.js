@@ -2,7 +2,9 @@ const {
   getFruitByLabel,
   addFruitConsumption,
   getDailyNutrition,
-  getMonthlyNutrition // Pastikan handler ini diimpor
+  getMonthlyNutrition, 
+  getDailyHistoryConsumptions,
+  getFruitDetailsById
 } = require('./handler');
 const Joi = require('joi');
 
@@ -51,6 +53,38 @@ const routes = [
         query: Joi.object({
           year: Joi.number().integer().min(2000).max(2100).optional().description('Tahun (YYYY)'),
           month: Joi.number().integer().min(1).max(12).optional().description('Bulan (1-12)')
+        })
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/api/history-harian/{userId}',
+    handler: getDailyHistoryConsumptions,
+    options: {
+      description: 'Mendapatkan riwayat scan harian untuk seorang pengguna',
+      tags: ['api', 'private'],
+      notes: 'Query opsional: date (YYYY-MM-DD), default hari ini',
+      validate: {
+        params: Joi.object({
+          userId: Joi.string().required().description('ID pengguna')
+        }),
+        query: Joi.object({
+          date: Joi.string().optional().description('Tanggal dalam format YYYY-MM-DD')
+        })
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/api/fruit/{fruitId}',
+    handler: getFruitDetailsById,
+    options: {
+      description: 'Mendapatkan detail nutrisi buah berdasarkan ID buah',
+      tags: ['api', 'public'],
+      validate: {
+        params: Joi.object({
+          fruitId: Joi.string().required().description('ID buah')
         })
       }
     }
