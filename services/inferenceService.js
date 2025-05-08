@@ -3,7 +3,7 @@ require('dotenv').config();
 
 // Basis data untuk informasi nutrisi buah
 const nutritionDatabase = {
-    "apel": {
+    "apel fuji": {
       "id": "apel-001",
       "name": "Apel",
       "kalori": 52,
@@ -78,7 +78,7 @@ const nutritionDatabase = {
         "manganese": 0.14
       }
     },
-    "jeruk": {
+    "jeruk mandarin": {
     "id": "jeruk-001",
     "name": "Jeruk",
     "kalori": 47,
