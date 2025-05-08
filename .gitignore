@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+
+# Environment
+.env
+c242-ps287-e72004400fa9.json
+credentials/*.json
+
+# Local config
+config/credential/
+smart-nutrition-app-457602-8a5427edbe99.json
+/home/nama_user/VM2/config/credential/smart-nutrition-app-457602-8a5427edbe99.json
+/API-Nutrisi-Buah API-Nutrisi-Buah.git
+/home/nama_user/VM2/API-Nutrisi-Buah.git
+API-Nutrisi-Buah.git
+/home/nama_user/VM2/bfg.jar
+bfg.jar
