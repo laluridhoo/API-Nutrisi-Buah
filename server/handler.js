@@ -2,6 +2,7 @@
 const { db, admin } = require('../config/firestore');
 const { v4: uuidv4 } = require('uuid');
 const inferenceService = require('../services/inferenceService');
+const { getImageUrlByFruitLabel } = require('./cloudStorage');
 
 // Log informasi dari environment & Firebase Admin SDK
 console.log('Project ID:', process.env.GOOGLE_CLOUD_PROJECT || 'ID tidak ditemukan');
@@ -340,13 +341,18 @@ const getDailyHistoryConsumptions= async (req, h) => {
 
     // Deklarasikan scanHistory sebelum digunakan
     const scanHistory = [];
-    snapshot.forEach(doc => {
+    for (const doc of snapshot.docs) {
       const data = doc.data();
+      const fruitLabel = data.fruitLabel;
+
+      const imageUrl = await getImageUrlByFruitLabel(fruitLabel);
+
       scanHistory.push({
-        fruitLabel: data.fruitLabel,
-        date: data.date
+        fruitLabel,
+        date: data.date,
+        imageUrl
       });
-    });
+    }
 
     return h.response({
       success: true,
