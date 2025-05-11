@@ -1,8 +1,9 @@
 // Handler.js - API Smart Nutrition
-const { db, admin } = require('../config/firestore');
+const { db, admin, serviceAccount } = require('../config/firestore');
 const { v4: uuidv4 } = require('uuid');
 const inferenceService = require('../services/inferenceService');
-const { getImageUrlByFruitLabel } = require('./cloudStorage');
+const { getImageUrlByFruitLabel } = require('./cloudStorage'); 
+
 
 // Log informasi dari environment & Firebase Admin SDK
 console.log('Project ID:', process.env.GOOGLE_CLOUD_PROJECT || 'ID tidak ditemukan');
@@ -353,6 +354,7 @@ const getDailyHistoryConsumptions= async (req, h) => {
         imageUrl
       });
     }
+
 
     return h.response({
       success: true,
