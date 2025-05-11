@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const path = require('path');
 
 // Load credentials from file
-const serviceAccount = require(path.resolve('/home/nama_user/keyService/smart-nutrition-app-457602-f6d169feeb4d.json'));
+const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 if (!admin.apps.length) {
   admin.initializeApp({
