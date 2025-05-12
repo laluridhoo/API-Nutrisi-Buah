@@ -59,24 +59,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/api/history-harian/{userId}',
-    handler: getDailyHistoryConsumptions,
-    options: {
-      description: 'Mendapatkan riwayat scan harian untuk seorang pengguna',
-      tags: ['api', 'private'],
-      notes: 'Query opsional: date (YYYY-MM-DD), default hari ini',
-      validate: {
-        params: Joi.object({
-          userId: Joi.string().required().description('ID pengguna')
-        }),
-        query: Joi.object({
-          date: Joi.string().optional().description('Tanggal dalam format YYYY-MM-DD')
-        })
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/api/fruit/{fruitId}',
     handler: getFruitDetailsById,
     options: {
