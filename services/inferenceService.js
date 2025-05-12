@@ -178,31 +178,31 @@ const nutritionDatabase = {
       "manganese": 0.08
     }
   },
-  "tomat": {
-    "id": "tomat-001",
-    "name": "Tomat",
-    "kalori": 18,
-    "protein": 0.9,
-    "karbohidrat": 3.9,
-    "lemak": 0.2,
-    "water": 94.5,
-    "energy": {
-      "atwater": 1.6,
-      "specific": 0.2
-    },
-    "nitrogen": 2.8,
-    "minerals": {
-      "calcium": 10,
-      "iron": 0.27,
-      "magnesium": 11,
-      "phosphorus": 24,
-      "potassium": 237,
-      "sodium": 5,
-      "zinc": 0.17,
-      "copper": 0.06,
-      "manganese": 0.11
-    }
+  "nanas": {
+  "id": "nanas-001",
+  "name": "Nanas",
+  "kalori": 50,
+  "protein": 0.5,
+  "karbohidrat": 13.1,
+  "lemak": 0.1,
+  "water": 86.0,
+  "energy": {
+    "atwater": 2.1,
+    "specific": 0.3
   },
+  "nitrogen": 1.6,
+  "minerals": {
+    "calcium": 13,
+    "iron": 0.29,
+    "magnesium": 12,
+    "phosphorus": 8,
+    "potassium": 109,
+    "sodium": 1,
+    "zinc": 0.12,
+    "copper": 0.11,
+    "manganese": 0.93
+  }
+},
   "alpukat": {
     "id": "alpukat-001",
     "name": "Alpukat",
