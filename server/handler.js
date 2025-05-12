@@ -1,5 +1,5 @@
 // Handler.js - API Smart Nutrition
-const { db, admin, serviceAccount } = require('../config/firestore');
+const { db, admin, erviceAccounts } = require('../config/firestore');
 const { v4: uuidv4 } = require('uuid');
 const inferenceService = require('../services/inferenceService');
 const { getImageUrlByFruitLabel } = require('./cloudStorage'); 
@@ -155,7 +155,8 @@ const getDailyNutrition = async (req, h) => {
     let totalLemak = 0;
     const items = [];
 
-    snapshot.forEach(doc => {
+    // Kumpulkan data konsumsi
+    for (const doc of snapshot.docs) {
       const consumption = doc.data();
       totalKalori += consumption.kalori;
       totalProtein += consumption.protein;
@@ -166,11 +167,20 @@ const getDailyNutrition = async (req, h) => {
         id: consumption.id,
         fruitId: consumption.fruitId,
         fruitName: consumption.fruitName,
+        fruitLabel: consumption.fruitLabel,
         quantity: consumption.quantity,
         kalori: consumption.kalori,
         timestamp: consumption.timestamp.toDate()
       });
-    });
+    }
+
+    // Tambahkan imageUrl ke setiap item
+    const itemsWithImage = await Promise.all(
+      items.map(async (item) => ({
+        ...item,
+        imageUrl: await getImageUrlByFruitLabel(item.fruitLabel)
+      }))
+    );
 
     // Membulatkan hasil ke 2 angka di belakang koma
     return h.response({
@@ -181,7 +191,7 @@ const getDailyNutrition = async (req, h) => {
         totalProtein: parseFloat(totalProtein.toFixed(2)),
         totalKarbohidrat: parseFloat(totalKarbohidrat.toFixed(2)),
         totalLemak: parseFloat(totalLemak.toFixed(2)),
-        items
+        items: itemsWithImage
       }
     }).code(200);
   } catch (error) {
