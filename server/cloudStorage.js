@@ -8,10 +8,10 @@ const getImageUrlByFruitLabel = async (fruitLabel) => {
   const file = storage.bucket(bucketName).file(fileName);
 
   try {
-    // Gunakan signed URL valid selama 1 jam
+    // Gunakan signed URL valid selama 1 hari
     const [url] = await file.getSignedUrl({
       action: 'read',
-      expires: Date.now() + 60 * 60 * 1000
+      expires: Date.now() + 24 * 60 * 60 * 1000 
     });
     return url;
   } catch (err) {
