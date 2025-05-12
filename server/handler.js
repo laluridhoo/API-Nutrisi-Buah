@@ -229,17 +229,17 @@ const getMonthlyNutrition = async (req, h) => {
           totalProtein: 0,
           totalKarbohidrat: 0,
           totalLemak: 0,
-          dailySummaries: {}
+          items: []
         }
       }).code(200);
     }
 
-    // Menghitung total bulanan dan ringkasan harian
+    // Hitung total dan kumpulkan items
     let totalKalori = 0;
     let totalProtein = 0;
     let totalKarbohidrat = 0;
     let totalLemak = 0;
-    const dailySummaries = {};
+    const items = [];
 
     snapshot.forEach(doc => {
       const consumption = doc.data();
@@ -248,23 +248,7 @@ const getMonthlyNutrition = async (req, h) => {
       totalKarbohidrat += consumption.karbohidrat;
       totalLemak += consumption.lemak;
 
-      const day = consumption.day;
-      if (!dailySummaries[day]) {
-        dailySummaries[day] = {
-          day,
-          totalKalori: 0,
-          totalProtein: 0,
-          totalKarbohidrat: 0,
-          totalLemak: 0,
-          items: []
-        };
-      }
-
-      dailySummaries[day].totalKalori += consumption.kalori;
-      dailySummaries[day].totalProtein += consumption.protein;
-      dailySummaries[day].totalKarbohidrat += consumption.karbohidrat;
-      dailySummaries[day].totalLemak += consumption.lemak;
-      dailySummaries[day].items.push({
+      items.push({
         id: consumption.id,
         fruitId: consumption.fruitId,
         fruitName: consumption.fruitName,
@@ -274,30 +258,17 @@ const getMonthlyNutrition = async (req, h) => {
       });
     });
 
-    // Membulatkan total bulanan ke 2 angka di belakang koma
-    totalKalori = parseFloat(totalKalori.toFixed(2));
-    totalProtein = parseFloat(totalProtein.toFixed(2));
-    totalKarbohidrat = parseFloat(totalKarbohidrat.toFixed(2));
-    totalLemak = parseFloat(totalLemak.toFixed(2));
-
-    // Membulatkan ringkasan harian ke 2 angka di belakang koma
-    Object.keys(dailySummaries).forEach(day => {
-      dailySummaries[day].totalKalori = parseFloat(dailySummaries[day].totalKalori.toFixed(2));
-      dailySummaries[day].totalProtein = parseFloat(dailySummaries[day].totalProtein.toFixed(2));
-      dailySummaries[day].totalKarbohidrat = parseFloat(dailySummaries[day].totalKarbohidrat.toFixed(2));
-      dailySummaries[day].totalLemak = parseFloat(dailySummaries[day].totalLemak.toFixed(2));
-    });
-
+    // Membulatkan hasil ke 2 angka di belakang koma
     return h.response({
       success: true,
       data: {
         year: queryYear,
         month: queryMonth,
-        totalKalori,
-        totalProtein,
-        totalKarbohidrat,
-        totalLemak,
-        dailySummaries
+        totalKalori: parseFloat(totalKalori.toFixed(2)),
+        totalProtein: parseFloat(totalProtein.toFixed(2)),
+        totalKarbohidrat: parseFloat(totalKarbohidrat.toFixed(2)),
+        totalLemak: parseFloat(totalLemak.toFixed(2)),
+        items
       }
     }).code(200);
   } catch (error) {
