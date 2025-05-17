@@ -267,7 +267,13 @@ const getMonthlyNutrition = async (req, h) => {
         timestamp: consumption.timestamp.toDate()
       });
     });
-
+// Tambahkan imageUrl ke setiap item
+    const itemsWithImage = await Promise.all(
+      items.map(async (item) => ({
+        ...item,
+        imageUrl: await getImageUrlByFruitLabel(item.fruitLabel)
+      }))
+    );
     // Membulatkan hasil ke 2 angka di belakang koma
     return h.response({
       success: true,
@@ -278,7 +284,7 @@ const getMonthlyNutrition = async (req, h) => {
         totalProtein: parseFloat(totalProtein.toFixed(2)),
         totalKarbohidrat: parseFloat(totalKarbohidrat.toFixed(2)),
         totalLemak: parseFloat(totalLemak.toFixed(2)),
-        items
+        items :  itemsWithImage
       }
     }).code(200);
   } catch (error) {
