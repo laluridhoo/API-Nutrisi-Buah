@@ -170,7 +170,7 @@ const getDailyNutrition = async (req, h) => {
         fruitLabel: consumption.fruitLabel,
         quantity: consumption.quantity,
         kalori: consumption.kalori,
-        timestamp: consumption.timestamp.toDate()
+         timestamp: consumption.timestamp.toDate().toISOString().split('T')[0] 
       });
     }
 
@@ -264,7 +264,7 @@ const getMonthlyNutrition = async (req, h) => {
         fruitName: consumption.fruitName,
         quantity: consumption.quantity,
         kalori: consumption.kalori,
-        timestamp: consumption.timestamp.toDate()
+         timestamp: consumption.timestamp.toDate().toISOString().split('T')[0] 
       });
     });
 // Tambahkan imageUrl ke setiap item
