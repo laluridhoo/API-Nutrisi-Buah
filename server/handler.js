@@ -173,7 +173,8 @@ const getDailyNutrition = async (req, h) => {
          timestamp: consumption.timestamp.toDate().toISOString().split('T')[0] 
       });
     }
-
+ // Urutkan items dari terbaru ke terlama (descending)
+    items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     // Tambahkan imageUrl ke setiap item
     const itemsWithImage = await Promise.all(
       items.map(async (item) => ({
@@ -267,6 +268,8 @@ const getMonthlyNutrition = async (req, h) => {
          timestamp: consumption.timestamp.toDate().toISOString().split('T')[0] 
       });
     });
+     // Urutkan items dari terbaru ke terlama (descending)
+    items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 // Tambahkan imageUrl ke setiap item
     const itemsWithImage = await Promise.all(
       items.map(async (item) => ({
