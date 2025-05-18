@@ -263,6 +263,7 @@ const getMonthlyNutrition = async (req, h) => {
         id: consumption.id,
         fruitId: consumption.fruitId,
         fruitName: consumption.fruitName,
+        fruitLabel: consumption.fruitLabel,
         quantity: consumption.quantity,
         kalori: consumption.kalori,
          timestamp: consumption.timestamp.toDate().toISOString().split('T')[0] 
